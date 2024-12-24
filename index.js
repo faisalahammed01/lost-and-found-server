@@ -29,6 +29,17 @@ async function run() {
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
+    //!-------------------------------DB--------------------------------
+    const LostAndFoundCollection = client.db("lost-found").collection("data");
+
+    //!-------------------------------LostAndFound------------------------
+    app.post("/addItems", async (req, res) => {
+      const newData = req.body;
+      console.log("Adding new addItems", newData);
+
+      const result = await LostAndFoundCollection.insertOne(newData);
+      res.send(result);
+    });
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
