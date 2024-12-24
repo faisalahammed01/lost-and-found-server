@@ -39,6 +39,11 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+    app.get("/allItems/six", async (req, res) => {
+      const cursor = LostAndFoundCollection.find().sort({ date: -1 }).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.post("/addItems", async (req, res) => {
       const newData = req.body;
       console.log("Adding new addItems", newData);
