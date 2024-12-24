@@ -33,6 +33,12 @@ async function run() {
     const LostAndFoundCollection = client.db("lost-found").collection("data");
 
     //!-------------------------------LostAndFound------------------------
+
+    app.get("/allItems", async (req, res) => {
+      const cursor = LostAndFoundCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.post("/addItems", async (req, res) => {
       const newData = req.body;
       console.log("Adding new addItems", newData);
