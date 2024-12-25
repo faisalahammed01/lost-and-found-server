@@ -31,6 +31,7 @@ async function run() {
     );
     //!-------------------------------DB--------------------------------
     const LostAndFoundCollection = client.db("lost-found").collection("data");
+    const recoveredCollection = client.db("lost-found").collection("recovered");
 
     //!-------------------------------LostAndFound------------------------
 
@@ -55,6 +56,20 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await LostAndFoundCollection.findOne(query);
+      res.send(result);
+    });
+    // !-----------------------------Recovered----------------------------
+    app.post("/AddRecovered", async (req, res) => {
+      const newData = req.body;
+      console.log("Adding new addItems", newData);
+
+      const result = await recoveredCollection.insertOne(newData);
+      res.send(result);
+    });
+
+    app.get("/RecoveredItems", async (req, res) => {
+      const cursor = recoveredCollection.find();
+      const result = await cursor.toArray();
       res.send(result);
     });
   } finally {
