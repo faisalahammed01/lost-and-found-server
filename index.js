@@ -58,6 +58,14 @@ async function run() {
       const result = await LostAndFoundCollection.findOne(query);
       res.send(result);
     });
+    app.get("/myItem", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = LostAndFoundCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // !-----------------------------Recovered----------------------------
     app.post("/AddRecovered", async (req, res) => {
       const newData = req.body;
