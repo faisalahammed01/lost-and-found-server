@@ -66,6 +66,44 @@ async function run() {
       res.send(result);
     });
 
+    //  ----------------------Delete Item---------------------
+
+    app.get("/myItems", async (req, res) => {
+      const cursor = LostAndFoundCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.delete("/myItems/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await LostAndFoundCollection.deleteOne(query);
+      res.send(result);
+    });
+    // ----------------------Update Item----------------------------
+    app.get("/myItems/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await LostAndFoundCollection.findOne(query);
+      res.send(result);
+    });
+
+    app.put("/myItems/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: req.body,
+      };
+
+      const result = await LostAndFoundCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+
+      res.send(result);
+    });
+
     // !-----------------------------Recovered----------------------------
     app.post("/AddRecovered", async (req, res) => {
       const newData = req.body;
